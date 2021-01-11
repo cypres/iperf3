@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iperf3
+  labels:
+    app: iperf3
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: iperf3
+  template:
+    metadata:
+      labels:
+        app: iperf3
+    spec:
+      hostNetwork: true
+      containers:
+      - name: iperf
+        image: duedal/iperf3@sha256:fdb1377ea29feed8f6ab713bcbd4e6456ed4bfdb106c49fd378c7a4326e11dbe
+        ports:
+        - containerPort: 5201
+        livenessProbe:
+          exec:
+            command:
+            - iperf-probe
+          initialDelaySeconds: 5
+          periodSeconds: 15
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iperf
+  labels:
+    app: iperf
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: iperf
+  template:
+    metadata:
+      labels:
+        app: iperf
+    spec:
+      hostNetwork: true
+      containers:
+      - name: iperf
+        image: mlabbe/iperf@sha256:370ad5bf32cb71b506785d62e3f1df73e87205f992847305ac0ee38173f3f66a
+        ports:
+        - containerPort: 5001
