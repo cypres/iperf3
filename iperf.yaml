@@ -25,7 +25,10 @@ spec:
         livenessProbe:
           exec:
             command:
-            - iperf-probe
+            - timeout
+            - "6"
+            - /usr/local/bin/iperf-probe
+          timeoutSeconds: 7
           initialDelaySeconds: 5
           periodSeconds: 15
 ---
